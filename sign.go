@@ -41,7 +41,6 @@ func NewSignedData(data []byte) (*SignedData, error) {
 // SignerInfoConfig are optional values to include when adding a signer
 type SignerInfoConfig struct {
 	ExtraSignedAttributes []Attribute
-	ExtraUnsignedAttributes []Attribute
 }
 
 type signedData struct {
@@ -143,14 +142,6 @@ func (sd *SignedData) AddSignerChain(ee *x509.Certificate, pkey crypto.PrivateKe
 	if err != nil {
 		return err
 	}
-	unsigned_attrs := &attributes{}
-	for _, attr := range config.ExtraUnsignedAttributes {
-		unsigned_attrs.Add(attr.Type, attr.Value)
-	}
-	finalUnsignedAttrs, err := unsigned_attrs.ForMarshalling()
-	if err != nil {
-		return err
-	}
 	signature, err := signAttributes(finalAttrs, pkey, hash)
 	if err != nil {
 		return err
@@ -170,7 +161,6 @@ func (sd *SignedData) AddSignerChain(ee *x509.Certificate, pkey crypto.PrivateKe
 	}
 	signer := signerInfo{
 		AuthenticatedAttributes:   finalAttrs,
-		UnauthenticatedAttributes: finalUnsignedAttrs,
 		DigestAlgorithm:           pkix.AlgorithmIdentifier{Algorithm: oidDigestAlg},
 		DigestEncryptionAlgorithm: pkix.AlgorithmIdentifier{Algorithm: oidEncryptionAlg},
 		IssuerAndSerialNumber:     ias,

@@ -182,7 +182,7 @@ func TestSignAndVerifyWithOpenSSL(t *testing.T) {
 	os.Remove(tmpContentFile.Name()) // clean up
 }
 
-func ExampleSignedData(t *testing.T) {
+func TestExampleSignedData(t *testing.T) {
 	// generate a signing cert or load a key pair
 	cert, err := createTestCertificate(x509.SHA256WithRSA)
 	if err != nil {
@@ -251,7 +251,7 @@ func TestUnmarshalSignedAttribute(t *testing.T) {
 	oidTest := asn1.ObjectIdentifier{2, 3, 4, 5, 6, 7}
 	testValue := "TestValue"
 	if err := toBeSigned.AddSigner(cert.Certificate, *cert.PrivateKey, SignerInfoConfig{
-		ExtraSignedAttributes: []Attribute{Attribute{Type: oidTest, Value: testValue}},
+		ExtraSignedAttributes: []Attribute{{Type: oidTest, Value: testValue}},
 	}); err != nil {
 		t.Fatalf("Cannot add signer: %s", err)
 	}

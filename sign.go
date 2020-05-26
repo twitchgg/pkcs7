@@ -15,7 +15,7 @@ import (
 
 // SignedData is an opaque data structure for creating signed data payloads
 type SignedData struct {
-	sd                  signedData
+	sd                  SignedDataInfo
 	certs               []*x509.Certificate
 	data, messageDigest []byte
 	digestOid           asn1.ObjectIdentifier
@@ -72,7 +72,7 @@ func newSignedData(contentType asn1.ObjectIdentifier, data []byte) (*SignedData,
 		ContentType: contentType,
 		Content:     asn1.RawValue{Class: 2, Tag: 0, Bytes: content, IsCompound: true},
 	}
-	sd := signedData{
+	sd := SignedDataInfo{
 		ContentInfo: ci,
 		Version:     1,
 	}
@@ -85,7 +85,8 @@ type SignerInfoConfig struct {
 	ExtraUnsignedAttributes []Attribute
 }
 
-type signedData struct {
+// SignedDataInfo Signed data info
+type SignedDataInfo struct {
 	Version                    int                        `asn1:"default:1"`
 	DigestAlgorithmIdentifiers []pkix.AlgorithmIdentifier `asn1:"set"`
 	ContentInfo                contentInfo
@@ -205,11 +206,11 @@ func (sd *SignedData) addSignerChain(ee *x509.Certificate, pkey crypto.PrivateKe
 	if err != nil {
 		return err
 	}
-	unsigned_attrs := &attributes{}
+	unsignedAttrs := &attributes{}
 	for _, attr := range config.ExtraUnsignedAttributes {
-		unsigned_attrs.Add(attr.Type, attr.Value)
+		unsignedAttrs.Add(attr.Type, attr.Value)
 	}
-	finalUnsignedAttrs, err := unsigned_attrs.ForMarshalling()
+	finalUnsignedAttrs, err := unsignedAttrs.ForMarshalling()
 	if err != nil {
 		return err
 	}
@@ -249,12 +250,12 @@ func (sd *SignedData) addSignerChain(ee *x509.Certificate, pkey crypto.PrivateKe
 	return nil
 }
 
-func (si *signerInfo) SetUnauthenticatedAttributes(extra_unsigned_attrs []Attribute) error {
-	unsigned_attrs := &attributes{}
-	for _, attr := range extra_unsigned_attrs {
-		unsigned_attrs.Add(attr.Type, attr.Value)
+func (si *signerInfo) SetUnauthenticatedAttributes(extraUnsignedAttrs []Attribute) error {
+	unsignedAttrs := &attributes{}
+	for _, attr := range extraUnsignedAttrs {
+		unsignedAttrs.Add(attr.Type, attr.Value)
 	}
-	finalUnsignedAttrs, err := unsigned_attrs.ForMarshalling()
+	finalUnsignedAttrs, err := unsignedAttrs.ForMarshalling()
 	if err != nil {
 		return err
 	}
@@ -275,7 +276,8 @@ func (sd *SignedData) Detach() {
 	sd.sd.ContentInfo = contentInfo{ContentType: OIDData}
 }
 
-func (sd *SignedData) GetSignedData() *signedData {
+// GetSignedData Get signed data
+func (sd *SignedData) GetSignedData() *SignedDataInfo {
 	return &sd.sd
 }
 
@@ -370,7 +372,7 @@ func DegenerateCertificate(cert []byte) ([]byte, error) {
 		return nil, err
 	}
 	emptyContent := contentInfo{ContentType: OIDData}
-	sd := signedData{
+	sd := SignedDataInfo{
 		Version:      1,
 		ContentInfo:  emptyContent,
 		Certificates: rawCert,

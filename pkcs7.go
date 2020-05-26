@@ -38,45 +38,71 @@ var ErrUnsupportedContentType = errors.New("pkcs7: cannot parse data: unimplemen
 type unsignedData []byte
 
 var (
-	// Signed Data OIDs
-	OIDData                   = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 7, 1}
-	OIDSignedData             = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 7, 2}
-	OIDEnvelopedData          = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 7, 3}
-	OIDEncryptedData          = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 7, 6}
-	OIDAttributeContentType   = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 3}
+	//OIDData Signed Data OIDs
+	OIDData = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 7, 1}
+	// OIDSignedData Signed Data OID
+	OIDSignedData = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 7, 2}
+	// OIDEnvelopedData Enveloped Data OID
+	OIDEnvelopedData = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 7, 3}
+	// OIDEncryptedData EncryptedData OID
+	OIDEncryptedData = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 7, 6}
+	// OIDAttributeContentType AttributeContentType OID
+	OIDAttributeContentType = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 3}
+	// OIDAttributeMessageDigest AttributeMessageDigest OID
 	OIDAttributeMessageDigest = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 4}
-	OIDAttributeSigningTime   = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 5}
+	// OIDAttributeSigningTime AttributeSigningTime OID
+	OIDAttributeSigningTime = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 5}
 
-	// Digest Algorithms
-	OIDDigestAlgorithmSHA1   = asn1.ObjectIdentifier{1, 3, 14, 3, 2, 26}
+	// OIDDigestAlgorithmSHA1 Digest Algorithms OID
+	OIDDigestAlgorithmSHA1 = asn1.ObjectIdentifier{1, 3, 14, 3, 2, 26}
+	// OIDDigestAlgorithmSHA256 DigestAlgorithmSHA256 OID
 	OIDDigestAlgorithmSHA256 = asn1.ObjectIdentifier{2, 16, 840, 1, 101, 3, 4, 2, 1}
+	// OIDDigestAlgorithmSHA384 DigestAlgorithmSHA384 OID
 	OIDDigestAlgorithmSHA384 = asn1.ObjectIdentifier{2, 16, 840, 1, 101, 3, 4, 2, 2}
+	// OIDDigestAlgorithmSHA512 DigestAlgorithmSHA512 OID
 	OIDDigestAlgorithmSHA512 = asn1.ObjectIdentifier{2, 16, 840, 1, 101, 3, 4, 2, 3}
 
-	// Signature Algorithms
-	OIDEncryptionAlgorithmRSA       = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 1, 1}
-	OIDEncryptionAlgorithmRSASHA1   = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 1, 5}
+	// OIDEncryptionAlgorithmRSA Signature Algorithms OID
+	OIDEncryptionAlgorithmRSA = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 1, 1}
+	// OIDEncryptionAlgorithmRSASHA1 EncryptionAlgorithmRSASHA1 OID
+	OIDEncryptionAlgorithmRSASHA1 = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 1, 5}
+	// OIDEncryptionAlgorithmRSASHA256 EncryptionAlgorithmRSASHA256 OID
 	OIDEncryptionAlgorithmRSASHA256 = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 1, 11}
+	// OIDEncryptionAlgorithmRSASHA384 EncryptionAlgorithmRSASHA384
 	OIDEncryptionAlgorithmRSASHA384 = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 1, 12}
+	// OIDEncryptionAlgorithmRSASHA512 EncryptionAlgorithmRSASHA512 OID
 	OIDEncryptionAlgorithmRSASHA512 = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 1, 13}
 
-	OIDEncryptionAlgorithmDSA     = asn1.ObjectIdentifier{1, 2, 840, 10040, 4, 3}
-	OIDDigestAlgorithmECDSASHA1   = asn1.ObjectIdentifier{1, 2, 840, 10045, 4, 1}
+	// OIDEncryptionAlgorithmDSA EncryptionAlgorithmDSA OID
+	OIDEncryptionAlgorithmDSA = asn1.ObjectIdentifier{1, 2, 840, 10040, 4, 3}
+	// OIDDigestAlgorithmECDSASHA1 DigestAlgorithmECDSASHA1 OID
+	OIDDigestAlgorithmECDSASHA1 = asn1.ObjectIdentifier{1, 2, 840, 10045, 4, 1}
+	// OIDDigestAlgorithmECDSASHA256 DigestAlgorithmECDSASHA256 OID
 	OIDDigestAlgorithmECDSASHA256 = asn1.ObjectIdentifier{1, 2, 840, 10045, 4, 3, 2}
+	// OIDDigestAlgorithmECDSASHA384 DigestAlgorithmECDSASHA384 OID
 	OIDDigestAlgorithmECDSASHA384 = asn1.ObjectIdentifier{1, 2, 840, 10045, 4, 3, 3}
+	// OIDDigestAlgorithmECDSASHA512 DigestAlgorithmECDSASHA512 OID
 	OIDDigestAlgorithmECDSASHA512 = asn1.ObjectIdentifier{1, 2, 840, 10045, 4, 3, 4}
 
+	// OIDEncryptionAlgorithmECDSAP256 EncryptionAlgorithmECDSAP256 OID
 	OIDEncryptionAlgorithmECDSAP256 = asn1.ObjectIdentifier{1, 2, 840, 10045, 3, 1, 7}
+	// OIDEncryptionAlgorithmECDSAP384 EncryptionAlgorithmECDSAP384 OID
 	OIDEncryptionAlgorithmECDSAP384 = asn1.ObjectIdentifier{1, 3, 132, 0, 34}
+	// OIDEncryptionAlgorithmECDSAP521 EncryptionAlgorithmECDSAP521 OID
 	OIDEncryptionAlgorithmECDSAP521 = asn1.ObjectIdentifier{1, 3, 132, 0, 35}
 
-	// Encryption Algorithms
-	OIDEncryptionAlgorithmDESCBC     = asn1.ObjectIdentifier{1, 3, 14, 3, 2, 7}
+	//OIDEncryptionAlgorithmDESCBC  EncryptionAlgorithmDESCBC OID
+	OIDEncryptionAlgorithmDESCBC = asn1.ObjectIdentifier{1, 3, 14, 3, 2, 7}
+	// OIDEncryptionAlgorithmDESEDE3CBC EncryptionAlgorithmDESEDE3CBC OID
 	OIDEncryptionAlgorithmDESEDE3CBC = asn1.ObjectIdentifier{1, 2, 840, 113549, 3, 7}
-	OIDEncryptionAlgorithmAES256CBC  = asn1.ObjectIdentifier{2, 16, 840, 1, 101, 3, 4, 1, 42}
-	OIDEncryptionAlgorithmAES128GCM  = asn1.ObjectIdentifier{2, 16, 840, 1, 101, 3, 4, 1, 6}
-	OIDEncryptionAlgorithmAES128CBC  = asn1.ObjectIdentifier{2, 16, 840, 1, 101, 3, 4, 1, 2}
-	OIDEncryptionAlgorithmAES256GCM  = asn1.ObjectIdentifier{2, 16, 840, 1, 101, 3, 4, 1, 46}
+	// OIDEncryptionAlgorithmAES256CBC OIDEncryptionAlgorithmAES256CBC OID
+	OIDEncryptionAlgorithmAES256CBC = asn1.ObjectIdentifier{2, 16, 840, 1, 101, 3, 4, 1, 42}
+	// OIDEncryptionAlgorithmAES128GCM EncryptionAlgorithmAES128GCM OID
+	OIDEncryptionAlgorithmAES128GCM = asn1.ObjectIdentifier{2, 16, 840, 1, 101, 3, 4, 1, 6}
+	// OIDEncryptionAlgorithmAES128CBC EncryptionAlgorithmAES128CBC OID
+	OIDEncryptionAlgorithmAES128CBC = asn1.ObjectIdentifier{2, 16, 840, 1, 101, 3, 4, 1, 2}
+	// OIDEncryptionAlgorithmAES256GCM EncryptionAlgorithmAES256GCM OID
+	OIDEncryptionAlgorithmAES256GCM = asn1.ObjectIdentifier{2, 16, 840, 1, 101, 3, 4, 1, 46}
 )
 
 func getHashForOID(oid asn1.ObjectIdentifier) (crypto.Hash, error) {
